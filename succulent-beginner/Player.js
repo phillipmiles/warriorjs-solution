@@ -166,10 +166,6 @@ class Player {
                 var hostilesCoords = this.canTakeShotAtEnemy();
      
                 if(hostilesCoords.length > 0) {
-
-                    if(this.retrieveMemory(hostilesCoords[1])[0] == 'isArcher') {
-                        this.walk('left');
-                    } else 
                     if(this.isWithinMeleeRange(hostilesCoords[0])) {
                         warrior.attack(this.getCoordDirection(hostilesCoords[0]));
                     } else {
@@ -341,12 +337,7 @@ class Player {
                 //     return [{x: 2, y: 0}];
                 // }
             // }
-
-            if(entity === 'isEnemy' && this.retrieveMemory(adjCoords[i])[0].isEnemy === 'function') {
-                // if(this.retrieveMemory(adjCoords[i])[0].isEnemy()) {
-                    entitiyCoords.push(adjCoords[i]);
-                // }
-            } else if(this.retrieveMemory(adjCoords[i])[0] === entity) {
+			if(this.retrieveMemory(adjCoords[i])[0] === entity) {
 				entitiyCoords.push(adjCoords[i]);
 			}
 		}
@@ -439,14 +430,9 @@ class Player {
 
                 // CURRENTLY IF MEMORY ALREADY HAS SAY isStairs in mind, say after having rested for a few turns.
                 // THEN LOOKS AGAIN WILL OVERRIDE WITH AN ISEMPTY! - No it doesn't!
-                // if(lookingArray[j].isArcher()) {
-                //     if(this.retrieveMemory(observedCoord)[0] !== 'isArcher') {
-                //         this.addMemory(observedCoord, 'isArcher');
-                //     }
-                // } else 
                 if(lookingArray[j].isEnemy()) {
-                    if(this.retrieveMemory(observedCoord)[0] !== lookingArray[j]) {
-                        this.addMemory(observedCoord, lookingArray[j]);
+                    if(this.retrieveMemory(observedCoord)[0] !== 'isEnemy') {
+                        this.addMemory(observedCoord, 'isEnemy');
                     }
                 } else if(lookingArray[j].isCaptive()) {
 
@@ -605,20 +591,6 @@ class Player {
         return false;
     }
 
-    isjEnemy(unit) {
-
-        if(unit.isEnemy()) {
-            return true;
-        }
-        switch (unit.getCharacter()) {
-            case 'archer': 
-                return true;
-            default:
-                return false;
-        }
-
-    }
-
     canTakeShotAtEnemy() {
         var enemiesInRange = this.getEntityAdjToCoords('isEnemy', this.currentCoord, this.maxSightRange);
         var enemiesWithClearShot = [];
@@ -633,8 +605,7 @@ class Player {
                     
                     var targetCoord = new Coord(this.currentCoord.x + (traversalVals.x * distance), this.currentCoord.y + (traversalVals.y * distance));
                     
-                    // if(this.retrieveMemory(targetCoord)[0] === 'isEnemy') {
-                    if(this.retrieveMemory(targetCoord)[0].isEnemy()) {
+                    if(this.retrieveMemory(targetCoord)[0] === 'isEnemy') {
                         enemiesWithClearShot.push(targetCoord);
                     }
 
